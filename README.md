@@ -3,7 +3,19 @@
 ---
 This project is inspired by Instagram where we can create a post 
 with uploaded photos and interact with each other's posts through comments.  
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/AnhKun/repo-name/WorkflowName?label=WorkflowName)
+![Java](https://img.shields.io/badge/Java-blue)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-green)
+![JPA](https://img.shields.io/badge/JPA-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-gray)
+![Docker](https://img.shields.io/badge/Docker-blue)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-gray)
+![WebClient](https://img.shields.io/badge/WebClient-blue)
+![Spring Boot Test](https://img.shields.io/badge/Spring%20Boot%20Test-gray)
+![Postman](https://img.shields.io/badge/Postman-orange)
+
+
+
+
 ## Table of content
 
 ---

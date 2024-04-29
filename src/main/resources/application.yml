@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    username: root
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/photogram
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+base:
+  url: "http://localhost:8080"
+
+app:
+  jwt-secret: "7db023a314668464f6ada576ebf320e13d7839d2c1c36cfb8d472f9fccf702f6"
+  jwt-expiration-mil: 86400000
+  refresh-token-expiration-mil: 259200000
+

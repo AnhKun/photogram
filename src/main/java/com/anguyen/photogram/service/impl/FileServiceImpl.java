@@ -33,11 +33,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Flux<FileResponse> uploadFiles(List<MultipartFile> files) throws IOException {
-//        if (files == null || files.isEmpty()) {
-//            throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "No file uploaded");
-//        }
 
-        files.stream().forEach((file) -> {
+        files.stream().forEach(file -> {
             if (!FileValidator.isImage(file)) {
                 throw new ApiException(ErrorCode.IMAGE_INVALID);
             }

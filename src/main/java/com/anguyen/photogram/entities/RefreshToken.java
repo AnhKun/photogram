@@ -15,7 +15,7 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tokenId;
-    private String refreshToken;
+    private String refreshTokenString;
     private Instant expirationTime;
     @OneToOne
     private UserEntity user;

@@ -56,14 +56,12 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(newComment);
 
-        CommentResponse response = CommentResponse.builder()
+        return CommentResponse.builder()
                 .id(savedComment.getId())
                 .content(savedComment.getContent())
                 .date(savedComment.getDate())
                 .username(savedComment.getUser().getUsername())
                 .build();
-
-        return response;
     }
 
     @Override
@@ -86,21 +84,8 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = commentPage.getContent();
         List<CommentResponse> content = Converter.toList(commentList, CommentResponse.class);
 
-//        List<CommentResponse> responseList = new ArrayList<>();
-//
-//        commentList.forEach((comment) -> {
-//            CommentResponse commentResponse = new CommentResponse();
-//            CommentResponse.builder()
-//                    .id(comment.getId())
-//                    .content(comment.getContent())
-//                    .date(comment.getDate())
-//                    .username(comment.getUser().getUsername())
-//                    .build();
-//
-//            responseList.add(commentResponse);
-//        });
 
-        PageResponse<CommentResponse> response = PageResponse.<CommentResponse>builder()
+        return PageResponse.<CommentResponse>builder()
                 .content(content)
                 .pageNo(commentPage.getNumber())
                 .pageSize(commentPage.getSize())
@@ -108,8 +93,6 @@ public class CommentServiceImpl implements CommentService {
                 .totalPages(commentPage.getTotalPages())
                 .last(commentPage.isLast())
                 .build();
-
-        return response;
     }
 
     @Override
@@ -135,14 +118,12 @@ public class CommentServiceImpl implements CommentService {
         Comment updatedComment = commentRepository.save(existingComment);
 
         // return the data
-        CommentResponse response = CommentResponse.builder()
+        return CommentResponse.builder()
                 .id(updatedComment.getId())
                 .content(updatedComment.getContent())
                 .date(updatedComment.getDate())
                 .username(updatedComment.getUser().getUsername())
                 .build();
-
-        return response;
     }
 
     @Override

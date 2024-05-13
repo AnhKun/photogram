@@ -8,7 +8,7 @@ import com.anguyen.photogram.dto.response.ApiResponse;
 import com.anguyen.photogram.dto.response.JwtAuthResponse;
 
 public interface AuthService {
-    ApiResponse register(RegisterDto registerDto);
+    ApiResponse<Object> register(RegisterDto registerDto);
 
     JwtAuthResponse login(LoginDto loginDto);
 

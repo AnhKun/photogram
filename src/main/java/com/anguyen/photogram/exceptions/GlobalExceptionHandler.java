@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ApiResponse> handleApiException(ApiException ex) {
+    public ResponseEntity<ApiResponse<Object>> handleApiException(ApiException ex) {
         ErrorCode errorCode = ex.getErrorCode();
 
-        ApiResponse response = ApiResponse.builder()
+        ApiResponse<Object> response = ApiResponse.builder()
                 .code(errorCode.getStatusCode())
                 .message(ex.getMessage())
                 .build();
@@ -26,10 +26,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException ex) {
+    public ResponseEntity<ApiResponse<Object>> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
-        ApiResponse response = ApiResponse.builder()
+        ApiResponse<Object> response = ApiResponse.builder()
                 .code(errorCode.getStatusCode())
                 .message(errorCode.getMessage())
                 .build();
@@ -40,8 +40,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGlobalException(Exception ex) {
-        ApiResponse response = ApiResponse.builder()
+    public ResponseEntity<ApiResponse<Object>> handleGlobalException(Exception ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
                 .code(ErrorCode.UNCATEGORIZED.getStatusCode())
                 .message(ErrorCode.UNCATEGORIZED.getMessage())
                 .build();
@@ -52,10 +52,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponse<Object>> handleValidation(MethodArgumentNotValidException ex) {
         String message = ex.getFieldError().getDefaultMessage();
 
-        ApiResponse response = ApiResponse.builder()
+        ApiResponse<Object> response = ApiResponse.builder()
                 .code(HttpStatus.BAD_REQUEST)
                 .message(message)
                 .build();

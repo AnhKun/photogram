@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 @Getter
 public class ApiException extends RuntimeException {
-    private ErrorCode errorCode;
-    private String message;
+    private final ErrorCode errorCode;
+    private final String message;
 
     public ApiException(ErrorCode errorCode, String... obj) {
         String newMessage = errorCode.getMessage();
@@ -15,7 +15,6 @@ public class ApiException extends RuntimeException {
         if (Arrays.stream(obj).count() != 0) {
             newMessage = String.format("%s", Arrays.stream(obj).findFirst().get());
         }
-//        super(errorCode.getMessage());
         this.message = newMessage;
         this.errorCode = errorCode;
     }

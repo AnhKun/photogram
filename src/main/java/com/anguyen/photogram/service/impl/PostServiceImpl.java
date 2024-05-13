@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
         List<Post> postList = postPage.getContent();
         List<PostResponse> content = Converter.toList(postList, PostResponse.class);
 
-        PageResponse<PostResponse> response = PageResponse.<PostResponse>builder()
+        return PageResponse.<PostResponse>builder()
                 .content(content)
                 .pageNo(postPage.getNumber())
                 .pageSize(postPage.getSize())
@@ -96,8 +96,6 @@ public class PostServiceImpl implements PostService {
                 .totalPages(postPage.getTotalPages())
                 .last(postPage.isLast())
                 .build();
-
-        return response;
     }
 
     @Override

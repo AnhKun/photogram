@@ -13,7 +13,7 @@ public final class JwtSecurityUtil {
         if (authentication != null && authentication.getDetails() != null) {
             Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            return object instanceof UserDetailsImpl ? Optional.of((UserDetailsImpl) object) : Optional.empty();
+            return object instanceof UserDetailsImpl userDetails? Optional.of(userDetails) : Optional.empty();
         } else {
             return Optional.empty();
         }

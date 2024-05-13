@@ -13,9 +13,6 @@ with uploaded photos and interact with each other's posts through comments.
 ![Spring Boot Test](https://img.shields.io/badge/Spring%20Boot%20Test-gray)
 ![Postman](https://img.shields.io/badge/Postman-orange)
 
-
-
-
 ## Table of content
 
 ---

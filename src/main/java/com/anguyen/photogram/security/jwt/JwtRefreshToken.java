@@ -35,7 +35,7 @@ public class JwtRefreshToken {
 
         if (refreshToken == null) {
             refreshToken = RefreshToken.builder()
-                    .refreshToken(UUID.randomUUID().toString())
+                    .refreshTokenString(UUID.randomUUID().toString())
                     .expirationTime(Instant.now().plusMillis(refreshTokenExpirationMs))
                     .user(existingUser)
                     .build();

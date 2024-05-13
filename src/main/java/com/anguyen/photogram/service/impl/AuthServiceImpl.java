@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResponse register(RegisterDto registerDto) {
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(registerDto.getUsername()))) {
             log.error("Username {} already exists", registerDto.getUsername());
             throw new ApiException(ErrorCode.USER_EXISTED);
         }
@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = jwtTokenProvider.generateToken(authentication);
-        String refreshToken = jwtRefreshToken.generateRefreshToken(loginDto.getUsername()).getRefreshToken();
+        String refreshToken = jwtRefreshToken.generateRefreshToken(loginDto.getUsername()).getRefreshTokenString();
 
         return JwtAuthResponse.builder()
                 .accessToken(accessToken)
@@ -119,7 +119,6 @@ public class AuthServiceImpl implements AuthService {
                 .expiryTime(exp)
                 .build();
 
-        System.out.println(invalidatedToken.toString());
 
         invalidatedTokenRepository.save(invalidatedToken);
     }

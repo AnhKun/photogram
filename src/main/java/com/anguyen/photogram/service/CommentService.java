@@ -8,7 +8,8 @@ public interface CommentService {
 
     CommentResponse addComment(String postId, CommentRequest commentRequest);
 
-    PageResponse<CommentResponse> getAllCommentsByPost(String postId, int pageNo, int pageSize, String sortBy, String sortDir);
+    PageResponse<CommentResponse> getAllCommentsByPost(
+            String postId, int pageNo, int pageSize, String sortBy, String sortDir);
 
     CommentResponse updateComment(String id, CommentRequest commentRequest);
 

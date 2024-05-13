@@ -1,21 +1,23 @@
 package com.anguyen.photogram.security.jwt;
 
+import java.security.Key;
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
 import com.anguyen.photogram.entities.UserEntity;
 import com.anguyen.photogram.exceptions.ApiException;
 import com.anguyen.photogram.exceptions.ErrorCode;
 import com.anguyen.photogram.repositories.InvalidatedTokenRepository;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-
-import java.security.Key;
-import java.util.Date;
-import java.util.UUID;
 
 @Component
 @Slf4j

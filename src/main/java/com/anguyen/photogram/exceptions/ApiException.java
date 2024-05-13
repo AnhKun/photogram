@@ -1,8 +1,8 @@
 package com.anguyen.photogram.exceptions;
 
-import lombok.Getter;
-
 import java.util.Arrays;
+
+import lombok.Getter;
 
 @Getter
 public class ApiException extends RuntimeException {

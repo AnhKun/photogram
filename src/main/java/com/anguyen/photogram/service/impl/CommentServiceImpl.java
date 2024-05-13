@@ -1,5 +1,14 @@
 package com.anguyen.photogram.service.impl;
 
+import java.time.Instant;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import com.anguyen.photogram.converter.Converter;
 import com.anguyen.photogram.dto.request.CommentRequest;
 import com.anguyen.photogram.dto.response.CommentResponse;
@@ -15,15 +24,8 @@ import com.anguyen.photogram.repositories.UserRepository;
 import com.anguyen.photogram.security.services.UserDetailsImpl;
 import com.anguyen.photogram.service.CommentService;
 import com.anguyen.photogram.util.JwtSecurityUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -35,16 +37,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse addComment(String postId, CommentRequest commentRequest) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
-        UserEntity user = userRepository.findByIdAndStatusTrue(userDetails.getId()).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserEntity user = userRepository
+                .findByIdAndStatusTrue(userDetails.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
         // find the existing post by its id
-        Post existingPost = postRepository.findByIdAndStatusTrue(postId).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found")
-        );
+        Post existingPost = postRepository
+                .findByIdAndStatusTrue(postId)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         Comment newComment = Comment.builder()
                 .content(commentRequest.getContent())
@@ -65,10 +68,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PageResponse<CommentResponse> getAllCommentsByPost(String postId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PageResponse<CommentResponse> getAllCommentsByPost(
+            String postId, int pageNo, int pageSize, String sortBy, String sortDir) {
         // get the post we want to see its comments
-        Post existingPost = postRepository.findByIdAndStatusTrue(postId).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
+        Post existingPost = postRepository
+                .findByIdAndStatusTrue(postId)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         // check sort direction
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
@@ -84,7 +89,6 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = commentPage.getContent();
         List<CommentResponse> content = Converter.toList(commentList, CommentResponse.class);
 
-
         return PageResponse.<CommentResponse>builder()
                 .content(content)
                 .pageNo(commentPage.getNumber())
@@ -98,13 +102,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse updateComment(String id, CommentRequest commentRequest) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
         // find user's comment by id
-        Comment existingComment = commentRepository.findByIdAndStatusTrue(id).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Comment not found")
-        );
+        Comment existingComment = commentRepository
+                .findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Comment not found"));
 
         if (!existingComment.getUser().getId().equals(userDetails.getId())) {
             throw new ApiException(ErrorCode.UPDATE_OTHERS);
@@ -129,12 +133,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public String deleteComment(String id) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
         // find the existing comment
-        Comment existingComment = commentRepository.findByIdAndStatusTrue(id).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Comment not found"));
+        Comment existingComment = commentRepository
+                .findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Comment not found"));
 
         if (!existingComment.getUser().getId().equals(userDetails.getId())) {
             throw new ApiException(ErrorCode.DELETE_OTHERS);
@@ -146,5 +151,4 @@ public class CommentServiceImpl implements CommentService {
 
         return "Comment deleted!";
     }
-
 }

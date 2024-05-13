@@ -1,18 +1,20 @@
 package com.anguyen.photogram.security.jwt;
 
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.anguyen.photogram.entities.RefreshToken;
 import com.anguyen.photogram.entities.UserEntity;
 import com.anguyen.photogram.exceptions.ApiException;
 import com.anguyen.photogram.exceptions.ErrorCode;
 import com.anguyen.photogram.repositories.RefreshTokenRepository;
 import com.anguyen.photogram.repositories.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +28,12 @@ public class JwtRefreshToken {
 
     // generation refresh token from username
     public RefreshToken generateRefreshToken(String username) {
-        UserEntity existingUser = userRepository.findByUsernameAndStatusTrue(username).orElseThrow(() -> {
-            log.error("User not found with username: " + username);
-            throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found");
-        });
+        UserEntity existingUser = userRepository
+                .findByUsernameAndStatusTrue(username)
+                .orElseThrow(() -> {
+                    log.error("User not found with username: " + username);
+                    throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found");
+                });
 
         RefreshToken refreshToken = existingUser.getRefreshToken();
 
@@ -48,10 +52,12 @@ public class JwtRefreshToken {
 
     // verify the refresh token
     public RefreshToken verifyRefreshToken(String refreshToken) {
-        RefreshToken existingRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken).orElseThrow(() -> {
-            log.error("Refresh token not found");
-            throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Refresh token not found");
-        });
+        RefreshToken existingRefreshToken = refreshTokenRepository
+                .findByRefreshToken(refreshToken)
+                .orElseThrow(() -> {
+                    log.error("Refresh token not found");
+                    throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Refresh token not found");
+                });
 
         if (existingRefreshToken.getExpirationTime().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(existingRefreshToken);

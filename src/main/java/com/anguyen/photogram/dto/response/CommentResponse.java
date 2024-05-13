@@ -1,8 +1,8 @@
 package com.anguyen.photogram.dto.response;
 
-import lombok.*;
-
 import java.time.Instant;
+
+import lombok.*;
 
 @Getter
 @Setter

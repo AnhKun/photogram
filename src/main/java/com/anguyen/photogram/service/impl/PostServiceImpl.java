@@ -1,5 +1,14 @@
 package com.anguyen.photogram.service.impl;
 
+import java.time.Instant;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import com.anguyen.photogram.converter.Converter;
 import com.anguyen.photogram.dto.request.PostRequest;
 import com.anguyen.photogram.dto.response.PageResponse;
@@ -13,15 +22,8 @@ import com.anguyen.photogram.repositories.UserRepository;
 import com.anguyen.photogram.security.services.UserDetailsImpl;
 import com.anguyen.photogram.service.PostService;
 import com.anguyen.photogram.util.JwtSecurityUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +35,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse addPost(PostRequest postRequest) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found1"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found1"));
 
-        UserEntity user = userRepository.findByIdAndStatusTrue(userDetails.getId()).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserEntity user = userRepository
+                .findByIdAndStatusTrue(userDetails.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
         // create a post
         Post newPost = Post.builder()
@@ -57,18 +60,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse getPost(String id) {
         // check the data in DB and if exists, fetch the data of given id
-        Post post = postRepository.findByIdAndStatusTrue(id).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
+        Post post = postRepository
+                .findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         // return the data
         return Converter.toModel(post, PostResponse.class);
     }
 
     @Override
-    public PageResponse<PostResponse> getAllPosts(String userId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PageResponse<PostResponse> getAllPosts(
+            String userId, int pageNo, int pageSize, String sortBy, String sortDir) {
         // get the user
-        UserDetailsImpl user = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl user = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
         if (userId == null) {
             userId = user.getId();
@@ -101,12 +106,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse updatePost(String id, PostRequest postRequest) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
-
-        Post post = postRepository.findByIdAndStatusTrue(id).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
+        Post post = postRepository
+                .findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         if (!post.getUser().getId().equals(userDetails.getId())) {
             throw new ApiException(ErrorCode.UPDATE_OTHERS);
@@ -123,11 +128,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public String deletePost(String id) {
         // get the authenticated user
-        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo().orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+        UserDetailsImpl userDetails = JwtSecurityUtil.getJwtUserInfo()
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
 
-        Post post = postRepository.findByIdAndStatusTrue(id).orElseThrow(() ->
-                new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
+        Post post = postRepository
+                .findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         if (!post.getUser().getId().equals(userDetails.getId())) {
             throw new ApiException(ErrorCode.DELETE_OTHERS);
@@ -138,5 +144,4 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
         return "Deleted!";
     }
-
 }

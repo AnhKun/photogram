@@ -1,12 +1,13 @@
 package com.anguyen.photogram.service;
 
-import com.anguyen.photogram.dto.request.PostRequest;
-import com.anguyen.photogram.dto.response.PostResponse;
-import com.anguyen.photogram.entities.Post;
-import com.anguyen.photogram.entities.UserEntity;
-import com.anguyen.photogram.repositories.PostRepository;
-import com.anguyen.photogram.repositories.UserRepository;
-import com.anguyen.photogram.service.impl.PostServiceImpl;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import com.anguyen.photogram.dto.request.PostRequest;
+import com.anguyen.photogram.dto.response.PostResponse;
+import com.anguyen.photogram.entities.Post;
+import com.anguyen.photogram.entities.UserEntity;
+import com.anguyen.photogram.repositories.PostRepository;
+import com.anguyen.photogram.repositories.UserRepository;
+import com.anguyen.photogram.service.impl.PostServiceImpl;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +42,6 @@ public class PostServiceTest {
     private PostResponse postResponse;
     private Post post;
     private UserEntity user;
-
 
     @BeforeEach
     void initData() {
@@ -71,14 +71,12 @@ public class PostServiceTest {
                 .date(Instant.now())
                 .user(user)
                 .build();
-
     }
-
 
     @Test
     @WithMockUser(username = "username")
     void getPost_validRequest_success() {
-        //GIVEN
+        // GIVEN
         when(postRepository.findByIdAndStatusTrue(any())).thenReturn(Optional.ofNullable(post));
 
         // WHEN

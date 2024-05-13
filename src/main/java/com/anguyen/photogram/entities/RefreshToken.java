@@ -1,9 +1,10 @@
 package com.anguyen.photogram.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.Instant;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Getter
@@ -15,8 +16,10 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tokenId;
+
     private String refreshTokenString;
     private Instant expirationTime;
+
     @OneToOne
     private UserEntity user;
 }

@@ -1,5 +1,16 @@
 package com.anguyen.photogram.service.impl;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.anguyen.photogram.dto.request.LoginDto;
 import com.anguyen.photogram.dto.request.LogoutRequest;
 import com.anguyen.photogram.dto.request.RefreshTokenRequest;
@@ -18,19 +29,10 @@ import com.anguyen.photogram.security.SecurityConfig;
 import com.anguyen.photogram.security.jwt.JwtRefreshToken;
 import com.anguyen.photogram.security.jwt.JwtTokenProvider;
 import com.anguyen.photogram.service.AuthService;
+
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -71,16 +73,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtAuthResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()
-                )
-        );
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = jwtTokenProvider.generateToken(authentication);
-        String refreshToken = jwtRefreshToken.generateRefreshToken(loginDto.getUsername()).getRefreshTokenString();
+        String refreshToken =
+                jwtRefreshToken.generateRefreshToken(loginDto.getUsername()).getRefreshTokenString();
 
         return JwtAuthResponse.builder()
                 .accessToken(accessToken)
@@ -114,11 +113,8 @@ public class AuthServiceImpl implements AuthService {
         String uuid = claims.get("uuid", String.class);
         Date exp = claims.getExpiration();
 
-        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .id(uuid)
-                .expiryTime(exp)
-                .build();
-
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().id(uuid).expiryTime(exp).build();
 
         invalidatedTokenRepository.save(invalidatedToken);
     }

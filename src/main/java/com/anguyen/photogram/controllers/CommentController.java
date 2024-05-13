@@ -1,16 +1,19 @@
 package com.anguyen.photogram.controllers;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.anguyen.photogram.dto.request.CommentRequest;
 import com.anguyen.photogram.dto.response.ApiResponse;
 import com.anguyen.photogram.dto.response.CommentResponse;
 import com.anguyen.photogram.dto.response.PageResponse;
 import com.anguyen.photogram.service.CommentService;
 import com.anguyen.photogram.util.AppConstants;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,9 +23,7 @@ public class CommentController {
 
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<ApiResponse<CommentResponse>> addComment(
-            @PathVariable String postId,
-            @RequestBody @Valid CommentRequest commentRequest
-    ) {
+            @PathVariable String postId, @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse newComment = commentService.addComment(postId, commentRequest);
 
         ApiResponse<CommentResponse> response = ApiResponse.<CommentResponse>builder()
@@ -36,20 +37,23 @@ public class CommentController {
     @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<PageResponse<CommentResponse>> getAllCommentsByPost(
             @PathVariable String postId,
-            @RequestParam(name = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(name = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(name = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false)
+                    int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false)
+                    int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "date", required = false) String sortBy,
-            @RequestParam(name = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+            @RequestParam(name = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false)
+                    String sortDir) {
 
-        PageResponse<CommentResponse> response = commentService.getAllCommentsByPost(postId, pageNo, pageSize, sortBy, sortDir);
+        PageResponse<CommentResponse> response =
+                commentService.getAllCommentsByPost(postId, pageNo, pageSize, sortBy, sortDir);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/comments/{id}")
     public ResponseEntity<ApiResponse<CommentResponse>> updateComment(
-            @PathVariable String id,
-            @RequestBody @Valid CommentRequest commentRequest) {
+            @PathVariable String id, @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse updatedComment = commentService.updateComment(id, commentRequest);
 
         ApiResponse<CommentResponse> response = ApiResponse.<CommentResponse>builder()

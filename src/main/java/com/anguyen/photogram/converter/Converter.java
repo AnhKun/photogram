@@ -1,10 +1,10 @@
 package com.anguyen.photogram.converter;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NameTokenizers;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class Converter {

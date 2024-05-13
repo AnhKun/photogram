@@ -1,11 +1,11 @@
 package com.anguyen.photogram.exceptions;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-
     IMAGE_INVALID(HttpStatus.BAD_REQUEST, "Only image files are allowed"),
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     REPEAT_LOGOUT(HttpStatus.BAD_REQUEST, "You already logged out!"),
@@ -23,5 +23,4 @@ public enum ErrorCode {
         this.statusCode = statusCode;
         this.message = message;
     }
-
 }

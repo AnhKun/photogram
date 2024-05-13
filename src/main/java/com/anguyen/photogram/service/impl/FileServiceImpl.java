@@ -1,10 +1,8 @@
 package com.anguyen.photogram.service.impl;
 
-import com.anguyen.photogram.dto.response.FileResponse;
-import com.anguyen.photogram.exceptions.ApiException;
-import com.anguyen.photogram.exceptions.ErrorCode;
-import com.anguyen.photogram.service.FileService;
-import com.anguyen.photogram.util.FileValidator;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -13,10 +11,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
-import java.io.IOException;
-import java.util.List;
+import com.anguyen.photogram.dto.response.FileResponse;
+import com.anguyen.photogram.exceptions.ApiException;
+import com.anguyen.photogram.exceptions.ErrorCode;
+import com.anguyen.photogram.service.FileService;
+import com.anguyen.photogram.util.FileValidator;
+
+import reactor.core.publisher.Flux;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -45,11 +47,11 @@ public class FileServiceImpl implements FileService {
             body.add("files", file.getResource());
         }
 
-        return webClient.post()
+        return webClient
+                .post()
                 .uri("/minio/upload/files")
                 .body(BodyInserters.fromMultipartData(body))
                 .retrieve()
                 .bodyToFlux(FileResponse.class);
     }
-
 }

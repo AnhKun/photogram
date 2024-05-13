@@ -1,11 +1,9 @@
 package com.anguyen.photogram.controller;
 
-import com.anguyen.photogram.dto.request.PostRequest;
-import com.anguyen.photogram.dto.response.PostResponse;
-import com.anguyen.photogram.exceptions.ApiException;
-import com.anguyen.photogram.exceptions.ErrorCode;
-import com.anguyen.photogram.service.PostService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
+import com.anguyen.photogram.dto.request.PostRequest;
+import com.anguyen.photogram.dto.response.PostResponse;
+import com.anguyen.photogram.exceptions.ApiException;
+import com.anguyen.photogram.exceptions.ErrorCode;
+import com.anguyen.photogram.service.PostService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,7 +54,6 @@ public class PostControllerTest {
                 .imageName(List.of("test1.jpg", "test2.jpg"))
                 .date(Instant.now())
                 .build();
-
     }
 
     @Test
@@ -63,22 +63,17 @@ public class PostControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
 
-        Mockito.when(postService.addPost(ArgumentMatchers.any()))
-                .thenReturn(postResponse);
+        Mockito.when(postService.addPost(ArgumentMatchers.any())).thenReturn(postResponse);
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/v1/posts")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("result.id")
-                        .value("6e8bc6184ddb"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.caption")
-                        .value("first post"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.id").value("6e8bc6184ddb"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.caption").value("first post"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result.imageName")
                         .value(Matchers.contains("test1.jpg", "test2.jpg")));
-
     }
 
     @Test
@@ -86,14 +81,13 @@ public class PostControllerTest {
     void getPostById_idMissing_fail() throws Exception {
         // GIVEN
         String postId = String.valueOf(UUID.randomUUID()); // Generate a random post ID
-        Mockito.when(postService.getPost(postId)).thenThrow(new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
+        Mockito.when(postService.getPost(postId))
+                .thenThrow(new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Post not found"));
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/posts/{id}", postId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/{id}", postId)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                        .value("Post not found"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Post not found"));
     }
 }

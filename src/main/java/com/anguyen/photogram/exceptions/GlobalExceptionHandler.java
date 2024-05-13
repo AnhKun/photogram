@@ -1,12 +1,13 @@
 package com.anguyen.photogram.exceptions;
 
-import com.anguyen.photogram.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.anguyen.photogram.dto.response.ApiResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,9 +21,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .build();
 
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(response);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(response);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -34,9 +33,7 @@ public class GlobalExceptionHandler {
                 .message(errorCode.getMessage())
                 .build();
 
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(response);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(response);
     }
 
     @ExceptionHandler(Exception.class)
@@ -46,9 +43,7 @@ public class GlobalExceptionHandler {
                 .message(ErrorCode.UNCATEGORIZED.getMessage())
                 .build();
 
-        return ResponseEntity
-                .status(ErrorCode.UNCATEGORIZED.getStatusCode())
-                .body(response);
+        return ResponseEntity.status(ErrorCode.UNCATEGORIZED.getStatusCode()).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -59,8 +54,6 @@ public class GlobalExceptionHandler {
                 .code(HttpStatus.BAD_REQUEST)
                 .message(message)
                 .build();
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

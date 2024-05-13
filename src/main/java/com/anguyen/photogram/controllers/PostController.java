@@ -1,16 +1,19 @@
 package com.anguyen.photogram.controllers;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.anguyen.photogram.dto.request.PostRequest;
 import com.anguyen.photogram.dto.response.ApiResponse;
 import com.anguyen.photogram.dto.response.PageResponse;
 import com.anguyen.photogram.dto.response.PostResponse;
 import com.anguyen.photogram.service.PostService;
 import com.anguyen.photogram.util.AppConstants;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -44,19 +47,20 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<PageResponse<PostResponse>> getAllPost(
             @RequestParam(name = "userId", defaultValue = "", required = false) String userId,
-            @RequestParam(name = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(name = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(name = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false)
+                    int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false)
+                    int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "date", required = false) String sortBy,
-            @RequestParam(name = "sortDir", defaultValue = "dsc", required = false) String sortDir
-    ) {
+            @RequestParam(name = "sortDir", defaultValue = "dsc", required = false) String sortDir) {
         PageResponse<PostResponse> response = postService.getAllPosts(userId, pageNo, pageSize, sortBy, sortDir);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<ApiResponse<PostResponse>> updatePost(@PathVariable String id,
-                                                                @RequestBody @Valid PostRequest postRequest) {
+    public ResponseEntity<ApiResponse<PostResponse>> updatePost(
+            @PathVariable String id, @RequestBody @Valid PostRequest postRequest) {
 
         ApiResponse<PostResponse> body = ApiResponse.<PostResponse>builder()
                 .code(HttpStatus.OK)
@@ -77,6 +81,4 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
-
 }

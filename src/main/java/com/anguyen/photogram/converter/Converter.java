@@ -17,8 +17,8 @@ public class Converter {
     public static <T, Y> List<T> toList(final List<Y> list, final Class<T> zClass) {
         return list.stream().map(e -> toModel(e, zClass)).toList();
     }
-
-    private Converter() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
+//
+//    private Converter() {
+//        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+//    }
 }

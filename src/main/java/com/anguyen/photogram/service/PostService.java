@@ -10,7 +10,7 @@ public interface PostService {
 
     PostResponse getPost(String id);
 
-    PageResponse<PostResponse> getAllPosts(String userId, int pageNo, int pageSize, String sortBy, String sortDir);
+    PageResponse<PostResponse> getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
 
     PostResponse updatePost(String id, PostRequest postRequest);
 

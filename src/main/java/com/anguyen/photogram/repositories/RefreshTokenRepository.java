@@ -9,5 +9,5 @@ import com.anguyen.photogram.entities.RefreshToken;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
-    Optional<RefreshToken> findByRefreshToken(String refreshToken);
+    Optional<RefreshToken> findByRefreshTokenString(String refreshToken);
 }

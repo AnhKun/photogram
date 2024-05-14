@@ -53,7 +53,7 @@ public class PostController {
                     int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "date", required = false) String sortBy,
             @RequestParam(name = "sortDir", defaultValue = "dsc", required = false) String sortDir) {
-        PageResponse<PostResponse> response = postService.getAllPosts(userId, pageNo, pageSize, sortBy, sortDir);
+        PageResponse<PostResponse> response = postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -69,15 +69,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PageResponse<PostResponse> getAllPosts(
-            String userId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PageResponse<PostResponse> getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
         // get the user
         UserDetailsImpl user = JwtSecurityUtil.getJwtUserInfo()
                 .orElseThrow(() -> new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
-
-        if (userId == null) {
-            userId = user.getId();
-        }
 
         // check sort direction
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
@@ -87,7 +82,7 @@ public class PostServiceImpl implements PostService {
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<Post> postPage = postRepository.findAllByUserIdAndStatusTrue(userId, pageable);
+        Page<Post> postPage = postRepository.findAllByUserIdAndStatusTrue(user.getId(), pageable);
 
         // get content from Page object
         List<Post> postList = postPage.getContent();

@@ -53,7 +53,7 @@ public class JwtRefreshToken {
     // verify the refresh token
     public RefreshToken verifyRefreshToken(String refreshToken) {
         RefreshToken existingRefreshToken = refreshTokenRepository
-                .findByRefreshToken(refreshToken)
+                .findByRefreshTokenString(refreshToken)
                 .orElseThrow(() -> {
                     log.error("Refresh token not found");
                     throw new ApiException(ErrorCode.RESOURCE_NOT_FOUND, "Refresh token not found");

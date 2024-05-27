@@ -40,7 +40,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleGlobalException(Exception ex) {
         ApiResponse<Object> response = ApiResponse.builder()
                 .code(ErrorCode.UNCATEGORIZED.getStatusCode())
-                .message(ErrorCode.UNCATEGORIZED.getMessage())
+                //                .message(ErrorCode.UNCATEGORIZED.getMessage())
+                .message(ex.getMessage())
                 .build();
 
         return ResponseEntity.status(ErrorCode.UNCATEGORIZED.getStatusCode()).body(response);

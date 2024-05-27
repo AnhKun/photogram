@@ -1,0 +1,60 @@
+package com.anguyen.photogram.controllers;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.anguyen.photogram.dto.request.ChangePassword;
+import com.anguyen.photogram.dto.request.VerifyEmailRequest;
+import com.anguyen.photogram.dto.request.VerifyOtpRequest;
+import com.anguyen.photogram.dto.response.ApiResponse;
+import com.anguyen.photogram.service.ForgotPasswordService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/v1/forgotPassword")
+@RequiredArgsConstructor
+public class ForgotPasswordController {
+    private final ForgotPasswordService forgotPasswordService;
+
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestBody @Valid VerifyEmailRequest emailRequest) {
+        var response = forgotPasswordService.verifyEmail(emailRequest);
+
+        ApiResponse<String> body = ApiResponse.<String>builder()
+                .code(HttpStatus.OK)
+                .result(response)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(body);
+    }
+
+    @PostMapping("/verifyOtp")
+    public ResponseEntity<ApiResponse<String>> verifyOtp(@RequestBody @Valid VerifyOtpRequest otpRequest) {
+        var response = forgotPasswordService.verifyOtp(otpRequest);
+
+        HttpStatus code = response.equals("OTP has expired!") ? HttpStatus.EXPECTATION_FAILED : HttpStatus.OK;
+
+        ApiResponse<String> body =
+                ApiResponse.<String>builder().code(code).result(response).build();
+
+        return ResponseEntity.status(code).body(body);
+    }
+
+    @PostMapping("/changePassword/{email}")
+    public ResponseEntity<ApiResponse<String>> changePassword(
+            @RequestBody ChangePassword changePassword, @PathVariable String email) {
+        var response = forgotPasswordService.changePassword(changePassword, email);
+
+        HttpStatus code =
+                response.equals("Please enter the password again") ? HttpStatus.EXPECTATION_FAILED : HttpStatus.OK;
+
+        ApiResponse<String> body =
+                ApiResponse.<String>builder().code(code).result(response).build();
+
+        return ResponseEntity.status(code).body(body);
+    }
+}

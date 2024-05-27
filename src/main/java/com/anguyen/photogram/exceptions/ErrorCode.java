@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
     IMAGE_INVALID(HttpStatus.BAD_REQUEST, "Only image files are allowed"),
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, ""),
     REPEAT_LOGOUT(HttpStatus.BAD_REQUEST, "You already logged out!"),
     USER_EXISTED(HttpStatus.BAD_REQUEST, "User is already taken"),
     UNCATEGORIZED(HttpStatus.INTERNAL_SERVER_ERROR, "Uncategorized error"),

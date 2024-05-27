@@ -38,4 +38,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
 }

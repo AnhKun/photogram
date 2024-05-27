@@ -26,7 +26,9 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter authenticationFilter;
 
-    private static final String[] PUBLIC_ENDPOINT = {"/api/v1/auth/**", "api/v1/file/upload"};
+    private static final String[] PUBLIC_ENDPOINT = {
+        "/api/v1/auth/**", "api/v1/file/upload", "/api/v1/forgotPassword/**"
+    };
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
